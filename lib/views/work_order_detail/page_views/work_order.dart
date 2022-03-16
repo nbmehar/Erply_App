@@ -17,7 +17,7 @@ class WorkOrder extends StatefulWidget {
 }
 
 class _WorkOrderState extends State<WorkOrder> {
-  bool isListView = false;
+  bool isListView = true;
   final _random = Random();
 
   @override
@@ -74,9 +74,9 @@ class _WorkOrderState extends State<WorkOrder> {
                           ),
                           color: Colors.white,
                           onPressed: () {
-                            setState(() {
-                              isListView = !isListView;
-                            });
+                            // setState(() {
+                            // isListView = !isListView;
+                            // });
                           },
                         )),
                   ],

@@ -8,7 +8,7 @@ import 'package:erply_login/views/auth/login_screen.dart';
 import 'package:erply_login/views/schedule/schedule_screen.dart';
 import 'package:erply_login/views/settings/settings_screen.dart';
 import 'package:erply_login/views/work_order_detail/page_views/work_order.dart';
-import 'package:erply_login/views/work_order_detail/work_oder_detail_screen.dart';
+
 import 'package:erply_login/views/workorder/coustmer_list.dart';
 import 'package:erply_login/views/workorder/vehicle_list.dart';
 

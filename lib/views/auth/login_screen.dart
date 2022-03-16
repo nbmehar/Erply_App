@@ -1,14 +1,14 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:erply_login/constants/app_colors.dart';
-import 'package:erply_login/constants/app_images.dart';
+
 import 'package:erply_login/providers/login_provider.dart';
-import 'package:erply_login/views/demo.dart';
+
 import 'package:provider/provider.dart';
+
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
@@ -17,92 +17,99 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+          key: _scaffoldKey,
           backgroundColor: AppColors.darkBackground,
-          body: SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: 150.h, bottom: 100.h),
-                child: Container(
-                  width: 340.w,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: AppColors.darkBlueGrey,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "Login with",
-                          style: LoginStyles.headingStyle,
-                        ),
-                        const LoginTypeSelection(),
-                        SizedBox(height: 20.h),
-                        const LoginTextFields(),
-                        ClickableText(
-                          text: "Forgot Password?",
-                          onTap: () {},
-                        ),
-                        const LoginButton(),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        SimpleButton(
-                          title: 'Create account',
-                          bgColor: AppColors.primaryBlue,
-                          onTap: () {
-                            // context
-                            //   .read<LoginProvider>()
-                            //   .onTapCreateAccount(context);
-                            //Changed For Now
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => DemoScreen()),
-                            );
-                          },
-                          textStyle: LoginStyles.selectedBtnText
-                              .copyWith(color: AppColors.white),
-                        )
-                      ],
+          body: Consumer<LoginProvider>(builder: (context, prov, _) {
+            if (prov.isSigning) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return SingleChildScrollView(
+                child: Center(
+                  child: Container(
+                    width: 340.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.darkBlueGrey,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Login with",
+                            style: LoginStyles.headingStyle,
+                          ),
+                          const LoginTypeSelection(),
+                          SizedBox(height: 30.h),
+                          const LoginTextFields(),
+                          ClickableText(
+                            text: "Forgot Password?",
+                            onTap: () {},
+                          ),
+                          LoginButton(context),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          // SimpleButton(
+                          //   title: 'Create account',
+                          //   bgColor: AppColors.primaryBlue,
+                          //   onTap: () {
+                          //     // context
+                          //     //   .read<LoginProvider>()
+                          //     //   .onTapCreateAccount(context);
+                          //     //Changed For Now
+                          //     Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (context) => DemoScreen()),
+                          //     );
+                          //   },
+                          //   textStyle: LoginStyles.selectedBtnText
+                          //       .copyWith(color: AppColors.white),
+                          // )
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          )),
+              );
+            }
+          })),
     );
   }
 }
 
 class LoginButton extends StatelessWidget {
-  const LoginButton({
-    Key? key,
-  }) : super(key: key);
+  BuildContext oldContext;
+  LoginButton(this.oldContext);
 
   @override
   Widget build(BuildContext context) {
-    return context.watch<LoginProvider>().isSigning
-        ? const Center(
-            child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                color: AppColors.white,
-              ),
-            ),
-          ))
-        : SimpleButton(
-            title: 'Login',
-            bgColor: AppColors.disabledButton,
-            onTap: () => context.read<LoginProvider>().login(context),
-            textStyle: LoginStyles.selectedBtnText,
-          );
+    return
+        // context.watch<LoginProvider>().isSigning
+        //     ? const Center(
+        //         child: Padding(
+        //         padding: EdgeInsets.all(8.0),
+        //         child: SizedBox(
+        //           height: 30,
+        //           width: 30,
+        //           child: CircularProgressIndicator(
+        //             color: AppColors.white,
+        //           ),
+        //         ),
+        //       ))
+        // :
+        SimpleButton(
+      title: 'Login',
+      bgColor: AppColors.white,
+      onTap: () => context.read<LoginProvider>().login(oldContext),
+      textStyle: LoginStyles.selectedBtnText,
+    );
   }
 }
 
@@ -174,7 +181,7 @@ class LoginTextFields extends StatelessWidget {
               .copyWith(labelText: "Client Code"),
         ),
         SizedBox(
-          height: 10.h,
+          height: 15.h,
         ),
         TextField(
           scrollPadding: LoginStyles.scrollPadding,
@@ -185,7 +192,7 @@ class LoginTextFields extends StatelessWidget {
               LoginStyles.textFieldDecoration.copyWith(labelText: "Username"),
         ),
         SizedBox(
-          height: 10.h,
+          height: 15.h,
         ),
         TextField(
           scrollPadding: LoginStyles.scrollPadding,
@@ -217,12 +224,14 @@ class LoginTypeSelection extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(
-                  AppImages.userIcon,
-                  height: 20.h,
-                  width: 20.w,
-                  color: AppColors.blackOP8,
-                ),
+                // SvgPicture.asset(
+                //   AppImages.userIcon,
+                //   height: 20.h,
+                //   width: 20.w,
+                //   color: AppColors.blackOP8,
+                // ),
+                Icon(Icons.person),
+
                 SizedBox(
                   width: 5.w,
                 ),
@@ -244,12 +253,13 @@ class LoginTypeSelection extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(
-                  AppImages.keyIcon,
-                  height: 20.h,
-                  width: 20.w,
-                  color: AppColors.lightGrey,
-                ),
+                // SvgPicture.asset(
+                //   AppImages.keyIcon,
+                //   height: 20.h,
+                //   width: 20.w,
+                //   color: AppColors.lightGrey,
+                // ),
+                Icon(Icons.key),
                 SizedBox(
                   width: 5.w,
                 ),
@@ -302,13 +312,13 @@ class LoginStyles {
           borderSide: BorderSide(
             color: AppColors.borderColor,
           ),
-          borderRadius: BorderRadius.all(Radius.circular(10))),
+          borderRadius: BorderRadius.all(Radius.circular(0))),
       focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.borderColor),
-          borderRadius: BorderRadius.all(Radius.circular(10))),
+          borderRadius: BorderRadius.all(Radius.circular(0))),
       enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(
             color: AppColors.borderColor,
           ),
-          borderRadius: BorderRadius.all(Radius.circular(10))));
+          borderRadius: BorderRadius.all(Radius.circular(0))));
 }

@@ -1,3 +1,4 @@
+import 'package:erply_login/views/demo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:erply_login/components/custom_alerts.dart';
@@ -7,6 +8,11 @@ import 'package:erply_login/services/base_client.dart';
 import 'package:erply_login/services/login_services.dart';
 import 'package:erply_login/views/auth/create_account.dart';
 import 'package:erply_login/views/home/home.dart';
+import 'package:flutter/scheduler.dart';
+
+import '../views/work_order_detail/page_views/work_order.dart';
+import '../views/workorder/coustmer_list.dart';
+import '../views/workorder/vehicle_list.dart';
 
 class LoginProvider with ChangeNotifier {
   bool isSigning = false;
@@ -59,7 +65,9 @@ class LoginProvider with ChangeNotifier {
       UserInfo userInfo = UserInfo.fromJson(data);
       LoginServices().setLoginInfo(userInfo);
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => Home()));
+          context, MaterialPageRoute(builder: (_) => WorkOrder()));
+      // Navigator.pushReplacement(
+      //     context, MaterialPageRoute(builder: (_) => DemoScreen()));
     } else {
       debugPrint("something wrong :)");
     }
